@@ -111,7 +111,11 @@ docker run --rm --name=hello-reactjs -p 8010:80 "hello-reactjs:local"
 - [hello-reactjs](https://hub.docker.com/r/symplesims/hello-reactjs)
 
 ```
+# pull from hub
 docker pull symplesims/hello-reactjs:1.0
+
+# run on local
+docker run --rm --name=hello-reactjs -p 8010:80 "symplesims/hello-reactjs:1.0"
 ```
 
 ### buildx for multiple platform
