@@ -3,7 +3,7 @@ reactjs 지식이 없는 사람에게 가장 처음 시작하는 hello 데모
 
 ## node 및 npm 설치 
 ```
-npm install -g npm@9.8.1
+npm install -g npm@10.2.1
 
 nvm install v18.18.2
 nvm alias default v18.18.2
@@ -106,9 +106,15 @@ docker run --rm --name=hello-reactjs -p 8010:80 "hello-reactjs:local"
 
 ## Appendix
 
-- [ddd](https://hub.docker.com/r/symplesims/sample-golang-service)
+### docker-hub
 
-### buildx for multiple
+- [hello-reactjs](https://hub.docker.com/r/symplesims/hello-reactjs)
+
+```
+docker pull symplesims/hello-reactjs:1.0
+```
+
+### buildx for multiple platform
 
 ```
 docker buildx build --build-arg "VERSION=2310.3" --build-arg "PROFILE=production" \
