@@ -1,11 +1,15 @@
 FROM node:18-alpine as builder
 
-WORKDIR /app
+ENV CI="true"
 
-COPY package*.json ./
+WORKDIR /app
 
 # Installing dependencies
 COPY ./package.json ./
+
+# Remove package-lock.json
+RUN rm package-lock.json
+
 RUN npm install
 
 # Copying all the files in our project
