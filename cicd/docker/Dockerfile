@@ -15,7 +15,7 @@ COPY . .
 ENV NODE_ENV production
 
 # build artifact
-RUN npm run build
+RUN npm run build:prd
 
 # Running `npm ci` removes the existing node_modules directory and passing in --only=production ensures that only the production dependencies are installed. This ensures that the node_modules directory is as optimized as possible
 RUN npm ci --omit=dev && npm cache clean --force

@@ -1,0 +1,81 @@
+name: Deploy to ECR
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: input profile for build and runtime
+        type: string
+        default: "production"
+        required: true
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  packages: write # The permissions for packages can be scoped either to a user or an organization or to a repository.
+  contents: read  # This is required for actions/checkout read/write
+
+jobs:
+  build:
+    name: Build Artifact
+    runs-on: ubuntu-latest
+    environment:
+      name: SimplyDemo
+      url: https://symplesims.github.io
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      REPOSITORY_URL: ${{ vars.REPOSITORY_URL }}
+      PROFILE: ${{ github.event.inputs.profile }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm test
+
+      - name: initialize variables
+        id: initialize_vars
+        run: |
+          echo "AWS_REGION: ${{ env.AWS_REGION }}"
+          echo "REPOSITORY_URL: ${{ env.REPOSITORY_URL }}"
+          echo "APP_BUILD_NUMBER=$(date +'%y%m').${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+
+      - name: Setup Qemu
+        # https://github.com/docker/setup-qemu-action
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+#      - name: Issue STS Token
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          role-to-assume: ${{ secrets.ACTIONS_ROLE_ARN }}
+#          aws-region: ${{ env.AWS_REGION }}
+#          role-session-name: SimplyDemoGitHubActions
+#
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v2
+#        with:
+#          mask-password: 'false'
+#          registry-type: private
+
+      - name: Build and Deploy Image
+        uses: docker/build-push-action@v5
+        with:
+          provenance: false
+          context: .
+          file: ./cicd/docker/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: false
+          tags: "${{ env.REPOSITORY_URL }}:${{ env.APP_BUILD_NUMBER }}"
+          build-args: |
+            VERSION=${{ env.APP_BUILD_NUMBER }}
+            PROFILE=${{ env.PROFILE }}
