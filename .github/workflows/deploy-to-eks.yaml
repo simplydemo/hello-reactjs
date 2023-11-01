@@ -26,6 +26,7 @@ jobs:
     env:
       AWS_REGION: ${{ vars.AWS_REGION }}
       REPOSITORY_URL: ${{ vars.REPOSITORY_URL }}
+      CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
       PROFILE: ${{ github.event.inputs.profile }}
 
     steps:
