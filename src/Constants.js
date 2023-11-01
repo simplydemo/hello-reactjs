@@ -1,6 +1,6 @@
 const prod = {
     properties: {
-        API_URL: 'https://app.symplesims.github.io',
+        API_URL: 'https://app.opencaffes.com',
         PROFILE: 'Production'
     }
 };
