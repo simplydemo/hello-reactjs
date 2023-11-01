@@ -87,4 +87,4 @@ jobs:
           KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
         with:
           plugins: "https://github.com/jkroepke/helm-secrets" # optional
-          command: helm secrets upgrade --install --wait hello-reactjs --namespace default -f ./cicd/charts/values.yaml ./cicd/charts
+          command: helm secrets upgrade --install --wait hello-reactjs --namespace default --set 'image.tag=${{ env.APP_BUILD_NUMBER }}' -f ./cicd/charts/values.yaml ./cicd/charts
