@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: 779929131770.dkr.ecr.ap-northeast-2.amazonaws.com/simplydemo/hello-reactjs-ecr
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 80
+  serviceName: hello-reactjs
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false # HPA
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 90
+
+serviceAccount:
+  create: false

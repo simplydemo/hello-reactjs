@@ -132,3 +132,4 @@ dist
 /.idea/
 /package-lock.json
 /build/
+/cicd/charts/charts/
